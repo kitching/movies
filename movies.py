@@ -9,6 +9,8 @@ class Movie:
         self.title = title
         self.genre = genre
         self.year = year
+    def __repr__(self):
+        return f'({self.title} : {self.genre})'
 
 movie_list = [] # list of movie objects, assuming id=index
 year_dic = defaultdict(lambda: defaultdict(list))  # dictionary of dictionary of list
@@ -67,13 +69,14 @@ def get_uniques(genre: str = '', year_from: int = 0, year_to: int = 3000):
     for y in year_filter:            
         genre_dic = year_dic[y]
         if genre == '':
+            #ids.update({x for id_list in genre_dic.values() for x in id_list})
             for id_list in genre_dic.values():
                 ids.update(id_list)
         else:
             if genre in genre_dic.keys():
                 ids.update(genre_dic[genre.casefold()])
         
-    return [movie_list[id].title for id in ids]
+    return [movie_list[id] for id in ids]
 
 
 # retrieve movies in genre 'Animation', any date
