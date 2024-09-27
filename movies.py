@@ -33,7 +33,7 @@ def load():
                 genre = row[col_genre]
                 year = int(row[col_year])
                 id = i-1
-                #print(f' id: {i}, title: {title} genre: {genre} year: {year}')
+                #print(f' id: {id}, title: {title} genre: {genre} year: {year}')
 
                 movie_list.append(Movie(title, genre, year))
 
@@ -80,14 +80,15 @@ res = get_uniques('animation')
 print('### animation, any date ###')
 print(res)
 
-# retrieve moves in genre 'Action', 2006-2007
+# retrieve movies in genre 'Action', 2006-2007
 res = get_uniques('action', 2006, 2007)
 print('### action, 2006-2007 ##')
 print(res)
 
 # test average retrieval time over 1000 random queries
+trials = 1000
 total_ms = 0
-for i in range(0,1000):
+for i in range(0,trials):
     genre = random.choice(unique_genres)
     from_year = random.choice(unique_years)
     to_year = random.choice([y for y in unique_years if y >= from_year])
@@ -97,5 +98,5 @@ for i in range(0,1000):
     toc = time.perf_counter()
     ms = (toc - tic) * 1000
     total_ms += ms
-avg_ms = total_ms / 1000
+avg_ms = total_ms / trials
 print(f'{avg_ms} average ms')
