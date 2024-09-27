@@ -67,7 +67,8 @@ def get_uniques(genre: str = '', year_from: int = 0, year_to: int = 3000):
     for y in year_filter:            
         genre_dic = year_dic[y]
         if genre == '':
-            ids.update(genre_dic.values())
+            for id_list in genre_dic.values():
+                ids.update(id_list)
         else:
             if genre in genre_dic.keys():
                 ids.update(genre_dic[genre.casefold()])
@@ -83,6 +84,11 @@ print(res)
 # retrieve movies in genre 'Action', 2006-2007
 res = get_uniques('action', 2006, 2007)
 print('### action, 2006-2007 ##')
+print(res)
+
+# retrieve movies for any genre, 2006-2007
+res = get_uniques('', 2006, 2006)
+print('### any genre, 2006 ##')
 print(res)
 
 # test average retrieval time over 1000 random queries
