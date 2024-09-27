@@ -51,7 +51,7 @@ def load():
     unique_genres = sorted(unique_genres)
 
     print(unique_years)
-    print(unique_years)
+    print(unique_genres)
 
 load()
 
@@ -82,7 +82,7 @@ print(res)
 
 # retrieve moves in genre 'Action', 2006-2007
 res = get_uniques('action', 2006, 2007)
-print('### action, 2006-2007')
+print('### action, 2006-2007 ##')
 print(res)
 
 # test average retrieval time over 1000 random queries
