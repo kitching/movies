@@ -89,7 +89,7 @@ res = get_uniques('action', 2006, 2007)
 print('### action, 2006-2007 ##')
 print(res)
 
-# retrieve movies for any genre, 2006-2007
+# retrieve movies for any genre, 2006
 res = get_uniques('', 2006, 2006)
 print('### any genre, 2006 ##')
 print(res)
