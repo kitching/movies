@@ -58,10 +58,10 @@ def get_uniques(genre: str = '', from_year: int = 0, to_year: int = 3000):
     year_query = set(range(from_year, to_year+1)).intersection(unique_years)
     genre_query = (genre,) if genre != '' else unique_genres
     for y in year_query:
-            for g in genre_query:
-                key = (y, g.casefold())
-                if key in movie_dic.keys():
-                    ids.update(movie_dic[key])
+        for g in genre_query:
+            key = (y, g.casefold())
+            if key in movie_dic.keys():
+                ids.update(movie_dic[key])
 
     return [movie_list[x] for x in ids]
 
