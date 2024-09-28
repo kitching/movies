@@ -1,5 +1,4 @@
 import csv
-import sys
 from collections import defaultdict
 import time
 import random
@@ -10,12 +9,12 @@ class Movie:
         self.genre = genre
         self.year = year
     def __repr__(self):
-        return f'({self.title} : {self.genre})'
+        return f'({self.title} : {self.year} : {self.genre})'
 
 movie_list = [] # list of movie objects, assuming id=index
-year_dic = defaultdict(lambda: defaultdict(list))  # dictionary of dictionary of list
-unique_years = []
-unique_genres = []
+movie_dic = defaultdict(set)  # dictionary of sets, keyed on tuple(year, genre)
+unique_years = set()
+unique_genres = set()
 
 
 def load():
@@ -39,44 +38,32 @@ def load():
 
                 movie_list.append(Movie(title, genre, year))
 
+                unique_years.add(year)
+
                 genres = genre.split(',')
-                for genre in genres:
-                    year_dic[year][genre.casefold()].append(id)
+                for g in genres:
+                    key = (year,g.casefold())
+                    movie_dic[key].add(id)
 
-    global unique_years
-    unique_years = sorted(set(year_dic.keys()))
+                    unique_genres.add(g)
 
-    global unique_genres
-    unique_genres = set()
-    for genre_dic in year_dic.values():
-        unique_genres.update(genre_dic.keys())
-    unique_genres = sorted(unique_genres)
-
-    print(unique_years)
-    print(unique_genres)
+    #print(sorted(unique_years))
+    #print(sorted(unique_genres))
 
 load()
 
 
-def get_uniques(genre: str = '', year_from: int = 0, year_to: int = 3000):
-    if genre != '' and genre.casefold() not in unique_genres:
-        raise Exception('invalid genre')
-
+def get_uniques(genre: str = '', from_year: int = 0, to_year: int = 3000):
     ids = set()
-           
-    year_filter = list(set(year_dic.keys()).intersection(range(year_from, year_to+1)))
+    year_query = set(range(from_year, to_year+1)).intersection(unique_years)
+    genre_query = [genre] if genre != '' else list(unique_genres)
+    for y in year_query:
+            for g in genre_query:
+                key = (y, g.casefold())
+                if key in movie_dic.keys():
+                    ids.update(movie_dic[key])
 
-    for y in year_filter:            
-        genre_dic = year_dic[y]
-        if genre == '':
-            #ids.update({x for id_list in genre_dic.values() for x in id_list})
-            for id_list in genre_dic.values():
-                ids.update(id_list)
-        else:
-            if genre in genre_dic.keys():
-                ids.update(genre_dic[genre.casefold()])
-        
-    return [movie_list[id] for id in ids]
+    return [movie_list[x] for x in ids]
 
 
 # retrieve movies in genre 'Animation', any date
@@ -94,18 +81,20 @@ res = get_uniques('', 2006, 2006)
 print('### any genre, 2006 ##')
 print(res)
 
-# test average retrieval time over 1000 random queries
-trials = 1000
-total_ms = 0
-for i in range(0,trials):
-    genre = random.choice(unique_genres)
-    from_year = random.choice(unique_years)
-    to_year = random.choice([y for y in unique_years if y >= from_year])
 
-    tic = time.perf_counter()
-    res = get_uniques(genre, from_year, to_year)
-    toc = time.perf_counter()
-    ms = (toc - tic) * 1000
-    total_ms += ms
-avg_ms = total_ms / trials
-print(f'{avg_ms} average ms')
+# test average retrieval time over 1000 random queries
+def test_speed():
+    trials = 1000*100
+    tot_secs = 0
+    for i in range(0, trials):
+        genre = random.choice(list(unique_genres))
+        year_from = random.choice(list(unique_years))
+        year_to = random.choice([y for y in list(unique_years) if y >= year_from])
+        tic =  time.perf_counter()
+        movies = get_uniques(genre, year_from, year_to)
+        toc = time.perf_counter()    
+        tot_secs += (toc - tic)
+    avg_secs = tot_secs / trials
+    print(f'avg {avg_secs*1000} ms')
+
+test_speed()
