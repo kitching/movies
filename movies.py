@@ -56,7 +56,7 @@ load()
 def get_uniques(genre: str = '', from_year: int = 0, to_year: int = 3000):
     ids = set()
     year_query = set(range(from_year, to_year+1)).intersection(unique_years)
-    genre_query = [genre] if genre != '' else list(unique_genres)
+    genre_query = (genre,) if genre != '' else unique_genres
     for y in year_query:
             for g in genre_query:
                 key = (y, g.casefold())
