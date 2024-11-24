@@ -95,8 +95,8 @@ class Movies
             foreach(string g in genreQuery)
             {
                 (int, string) key = (y, g);
-                if (movieDict.ContainsKey(key))
-                    uniques.UnionWith(movieDict[key]);
+                if (movieDict.TryGetValue(key, out var indices))
+                    uniques.UnionWith(indices);
             }
         }
 
