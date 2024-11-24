@@ -36,7 +36,7 @@ class Movies
 
     public void Load()
     {
-        using (var reader = new StreamReader("E:\\Dropbox\\rob.kitching@bis.org\\csharp sandbox\\ConsoleApp1\\ConsoleApp1\\movies\\IMDB-Movie-Data.csv"))
+        using (var reader = new StreamReader("IMDB-Movie-Data.csv"))
         {
             var colIndices = new Dictionary<string, int>();
             int lineIndex = 0;
