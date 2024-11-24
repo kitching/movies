@@ -96,7 +96,7 @@ class Movies
             {
                 (int, string) key = (y, g);
                 if (movieDict.ContainsKey(key))
-                    foreach (int i in movieDict[key]) uniques.Add(i); // hashset has no AddRange method
+                    uniques.UnionWith(movieDict[key]);
             }
         }
 
